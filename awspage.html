@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Amazon AWS Buttons</title>
+  <style>
+    /* Add your CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: 1px solid #007bff;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <!-- Create Instance Button -->
+  <button id="createInstanceBtn">Create Instance</button>
+  
+  <!-- Create S3 Bucket Button -->
+  <button id="createS3BucketBtn">Create S3 Bucket</button>
+  
+  <!-- Create EBS Volume Button -->
+  <button id="createEbsVolumeBtn">Create EBS Volume</button>
+  
+  <!-- Attach EBS Volume Button -->
+  <button id="attachEbsVolumeBtn">Attach EBS Volume</button>
+  
+  <!-- Delete EBS Volume Button -->
+  <button id="deleteEbsVolumeBtn">Delete EBS Volume</button>
+
+  <script>
+    // Add click event listeners to all buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Get the button's ID to determine which action to perform
+        const buttonId = this.id;
+        switch (buttonId) {
+          case 'createInstanceBtn':
+            handleAction('https://kxk0wjda1j.execute-api.ap-south-1.amazonaws.com/integration/ec2');
+            break;
+          case 'createS3BucketBtn':
+            handleAction('https://n99xu3xxfj.execute-api.ap-south-1.amazonaws.com/s3creation/bucket');
+            break;
+          case 'createEbsVolumeBtn':
+            handleAction('https://ovdzcg0qf3.execute-api.ap-south-1.amazonaws.com/ebscreate/ebscreate');
+            break;
+          case 'attachEbsVolumeBtn':
+            handleAction('https://llxcd1mlbl.execute-api.ap-south-1.amazonaws.com/volumeattach/volumeattach');
+            break;
+          case 'deleteEbsVolumeBtn':
+            handleAction(' https://nx9sy754v7.execute-api.ap-south-1.amazonaws.com/volumedelete/deletevolume');
+            break;
+          default:
+            console.error('Unknown button ID:', buttonId);
+        }
+      });
+    });
+
+    // Function to handle the AJAX request
+    function handleAction(url) {
+      // Perform AJAX request to the provided URL
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          // Here, you can handle the response from the server if needed
+          console.log('AJAX response:', xhr.responseText);
+        }
+      };
+      xhr.open('GET', url, true);
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Redirect</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            padding: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        #content {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            width: 80%;
+            padding: 10px;
+            background-color: #f9f9f9;
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>INTEGRATION</h1>
+
+    <div class="button-container">
+        <!-- Button 1 - AWS (redirects to AWS.html) -->
+        <button class="button" onclick="redirectTo('http://65.2.124.25/aws.html');">AWS</button>
+
+        <!-- Button 2 - DOCKER -->
+        <button class="button" onclick="redirectTo('http://3.110.169.170/oo.html');">DOCKER</button>
+
+        <!-- Button 3 - JENKINS (redirects to Jenkins.html) -->
+        <button class="button" onclick="redirectTo('http://3.108.63.18/test2.html');">JENKINS</button>
+
+        <!-- Button 4 - WORKSPACE (redirects to workspace.html) -->
+        <button class="button" onclick="redirectTo('http://65.2.124.25/workspace.html');">WORKSPACE</button>
+
+        <!-- Button 5 - HTML INTERPRETER (redirects to livenotepad.html) -->
+        <button class="button" onclick="redirectTo('http://65.2.124.25/livenotepad.html');">LIVE NOTEPAD</button>
+    </div>
+
+    <!-- White box section to display the content -->
+    <div id="content">
+        <!-- Content will be dynamically loaded here -->
+    </div>
+
+    <script>
+        function loadContent(url) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("content").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
+

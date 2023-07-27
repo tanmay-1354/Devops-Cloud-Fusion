@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Docker Service</title>
+  <style>
+    /* Common styles for both themes */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      max-width: 700px;
+      word-wrap: break-word;
+    }
+
+    button {
+      background-color: #444;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+
+    input {
+      padding: 5px 10px;
+      margin: 5px;
+      border-radius: 5px;
+    }
+
+    #output {
+      background-color: #222;
+      color: #fff;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+
+    /* Light Theme */
+    .light-theme {
+      background-color: #f2f2f2;
+      color: #333;
+    }
+
+    /* Dark Theme */
+    .dark-theme {
+      background-color: #333;
+      color: #fff;
+    }
+
+    /* Top right corner button to toggle the theme */
+    #theme-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body class="light-theme">
+  <button id="theme-toggle" onclick="toggleTheme()">mode</button>
+  <div class="container">
+    <h1>Welcome to our Docker Service</h1>
+    <button onclick="list_running_docker()">List Running Containers</button>
+    <br>
+    <button onclick="stopDocker()">Stop Container</button>
+    <br>
+    <button onclick="runContainer()">Run the Container</button>
+    <br>
+    <button onclick="dockerImages()">To see docker images</button>
+    <br>
+    <button onclick="deleteimg()">Delete Image</button>
+    <br>
+    <button onclick="dockerMan()">To see docker Manual</button>
+    <br>
+    <div id="output"></div>
+  </div>
+     
+
+    <form action='http://3.110.169.170/cgi-bin/cli.py'> 
+	Type Your command to execute <input name='x' />
+ 	<br/>	
+	<input type='submit'>
+    </form>
+ 
+
+  <script>
+    // Function to toggle between light and dark themes
+    function toggleTheme() {
+      var body = document.body;
+      body.classList.toggle("light-theme");
+      body.classList.toggle("dark-theme");
+    }
+
+       function list_running_docker() {
+      var xhr = new XMLHttpRequest();
+      var url = "http://3.110.169.170/cgi-bin/list_docker.py";
+      xhr.open("GET", url);
+      xhr.send();
+
+      xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          document.getElementById("output").innerHTML = this.responseText;
+        }
+      };
+    }
+
+    function stopDocker() {
+      var container_id = prompt("Enter the Container id:");
+
+      if (container_id !== null && container_id !== "") {
+        var xhr = new XMLHttpRequest();
+        var url = "http://3.110.169.170/cgi-bin/stop_docker.py?cname=" + container_id;
+        var params = "container_id=" + encodeURIComponent(container_id);
+
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("output").innerHTML = xhr.responseText;
+          }
+        };
+        xhr.send(params);
+      }
+    }
+
+    function runContainer() {
+      var containerName = prompt("Enter the Image  Name:");
+
+      if (containerName !== null && containerName !== "") {
+        var xhr = new XMLHttpRequest();
+        var url = "http://3.110.169.170/cgi-bin/launch_container.py?cname=" + containerName;
+        var params = "container_name=" + encodeURIComponent(containerName);
+
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("output").innerHTML = xhr.responseText;
+          }
+        };
+        xhr.send(params);
+      }
+    }
+ 
+    function deleteimg() {
+      var ImageName = prompt("Enter the Image Name:");
+
+      if (ImageName !== null && ImageName !== "") {
+        var xhr = new XMLHttpRequest();
+        var url = "http://3.110.169.170/cgi-bin/delete_img.py?cname=" + ImageName;
+        var params = "Image_name=" + encodeURIComponent(ImageName);
+
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("output").innerHTML = xhr.responseText;
+          }
+        };
+        xhr.send(params);
+      }
+    }
+ 
+
+     function dockerImages() {
+      var xhr = new XMLHttpRequest();
+      var url = "http://3.110.169.170/cgi-bin/docker_img.py";
+      xhr.open("GET", url);
+      xhr.send();
+
+      xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          document.getElementById("output").innerHTML = this.responseText;
+        }
+      };
+    
+    }
+
+   
+    
+
+    function dockerMan() {
+      var xhr = new XMLHttpRequest();
+      var url = "http://3.110.169.170/cgi-bin/docker_man.py";
+      xhr.open("GET", url);
+      xhr.send();
+
+      xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          document.getElementById("output").innerHTML = this.responseText;
+        }
+      };
+    }
+  </script>
+</body>
+
+</html>
+
